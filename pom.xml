@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.netbeetle</groupId>
   <artifactId>jackson-extensions</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>2.0-SNAPSHOT</version>
   <name>${project.groupId}.${project.artifactId}</name>
   <dependencies>
     <dependency>
