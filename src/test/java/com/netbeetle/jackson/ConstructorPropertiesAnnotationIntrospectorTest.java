@@ -1,49 +1,38 @@
 package com.netbeetle.jackson;
 
-import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
 
-import lombok.Data;
-
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.map.DeserializationConfig;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.Value;
 import org.junit.Test;
 
-import com.netbeetle.jackson.ConstructorPropertiesAnnotationIntrospector;
-
-public class ConstructorPropertiesAnnotationIntrospectorTest
-{
-    @Data
-    private static class ImmutablePojo
-    {
-        private final String name;
-        private final int value;
+public class ConstructorPropertiesAnnotationIntrospectorTest {
+    @Value
+    private static class ImmutablePojo {
+        String name;
+        int value;
     }
 
     private final ImmutablePojo instance = new ImmutablePojo("foobar", 42);
 
     @Test(expected = JsonMappingException.class)
-    public void testJacksonUnableToDeserialize() throws JsonGenerationException,
-        JsonMappingException, IOException
-    {
+    public void testJacksonUnableToDeserialize() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(instance);
         mapper.readValue(json, ImmutablePojo.class);
     }
 
     @Test
-    public void testJacksonAbleToDeserialize() throws JsonGenerationException,
-        JsonMappingException, IOException
-    {
+    public void testJacksonAbleToDeserialize() throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        DeserializationConfig config = mapper.getDeserializationConfig();
-        config.appendAnnotationIntrospector(new ConstructorPropertiesAnnotationIntrospector());
+        mapper.setAnnotationIntrospector(new ConstructorPropertiesAnnotationIntrospector());
         String json = mapper.writeValueAsString(instance);
+        assertThat(json, is("{\"name\":\"foobar\",\"value\":42}"));
         ImmutablePojo output = mapper.readValue(json, ImmutablePojo.class);
-        assertThat(output, equalTo(instance));
+        assertThat(output, is(instance));
     }
 }

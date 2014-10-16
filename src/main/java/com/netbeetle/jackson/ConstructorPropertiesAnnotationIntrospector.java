@@ -4,11 +4,12 @@ import java.beans.ConstructorProperties;
 import java.lang.reflect.Constructor;
 import java.util.Collections;
 
-import org.codehaus.jackson.annotate.JsonProperty;
-import org.codehaus.jackson.map.introspect.Annotated;
-import org.codehaus.jackson.map.introspect.AnnotatedConstructor;
-import org.codehaus.jackson.map.introspect.AnnotatedParameter;
-import org.codehaus.jackson.map.introspect.NopAnnotationIntrospector;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.introspect.Annotated;
+import com.fasterxml.jackson.databind.introspect.AnnotatedConstructor;
+import com.fasterxml.jackson.databind.introspect.AnnotatedMember;
+import com.fasterxml.jackson.databind.introspect.AnnotatedParameter;
+import com.fasterxml.jackson.databind.introspect.NopAnnotationIntrospector;
 
 public class ConstructorPropertiesAnnotationIntrospector extends NopAnnotationIntrospector
 {
@@ -41,11 +42,9 @@ public class ConstructorPropertiesAnnotationIntrospector extends NopAnnotationIn
     }
 
     @Override
-    public String findPropertyNameForParam(AnnotatedParameter param)
-    {
-        JsonProperty property = param.getAnnotation(JsonProperty.class);
-        if (property == null)
-        {
+    public String findImplicitPropertyName(AnnotatedMember member) {
+        JsonProperty property = member.getAnnotation(JsonProperty.class);
+        if (property == null) {
             return null;
         }
         return property.value();
