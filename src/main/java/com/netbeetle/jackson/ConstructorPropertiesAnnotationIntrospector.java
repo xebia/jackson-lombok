@@ -1,6 +1,7 @@
 package com.netbeetle.jackson;
 
 import java.beans.ConstructorProperties;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.Collections;
@@ -10,72 +11,99 @@ import com.fasterxml.jackson.databind.introspect.Annotated;
 import com.fasterxml.jackson.databind.introspect.AnnotatedConstructor;
 import com.fasterxml.jackson.databind.introspect.AnnotatedMember;
 import com.fasterxml.jackson.databind.introspect.AnnotatedMethod;
+import com.fasterxml.jackson.databind.introspect.AnnotatedParameter;
 import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
-import com.fasterxml.jackson.databind.introspect.NopAnnotationIntrospector;
 import com.fasterxml.jackson.databind.util.BeanUtil;
 
 public class ConstructorPropertiesAnnotationIntrospector extends JacksonAnnotationIntrospector {
     @Override
-    public boolean hasCreatorAnnotation(Annotated a) {
-        if (super.hasCreatorAnnotation(a)) {
+    public boolean hasCreatorAnnotation(Annotated annotated) {
+        if (super.hasCreatorAnnotation(annotated)) {
             return true;
-        } else if (!(a instanceof AnnotatedConstructor)) {
+        } else if (!(annotated instanceof AnnotatedConstructor)) {
             return false;
         } else {
-            AnnotatedConstructor ac = (AnnotatedConstructor) a;
+            AnnotatedConstructor annotatedConstructor = (AnnotatedConstructor) annotated;
 
-            Constructor<?> c = ac.getAnnotated();
-            ConstructorProperties properties = c.getAnnotation(ConstructorProperties.class);
+            ConstructorProperties properties = getConstructorPropertiesAnnotation(annotatedConstructor);
 
             if (properties == null) {
                 return false;
+            } else {
+                addJacksonAnnotationsToContructorParameters(annotatedConstructor);
+                return true;
             }
-
-            for (int i = 0; i < ac.getParameterCount(); i++) {
-                String name = properties.value()[i];
-                try {
-                    Field field = ac.getDeclaringClass().getDeclaredField(name);
-                    if (field != null) {
-                        JsonProperty annotation = field.getAnnotation(JsonProperty.class);
-                        if (annotation != null) {
-                            name = annotation.value();
-                        }
-                    }
-                } catch (NoSuchFieldException ignored) {
-                }
-                JsonProperty jsonProperty =
-                        ProxyAnnotation.of(JsonProperty.class, Collections.singletonMap("value", name));
-                ac.getParameter(i).addOrOverride(jsonProperty);
-            }
-            return true;
         }
+    }
+
+    private void addJacksonAnnotationsToContructorParameters(AnnotatedConstructor annotatedConstructor) {
+        ConstructorProperties properties = getConstructorPropertiesAnnotation(annotatedConstructor);
+        for (int i = 0; i < annotatedConstructor.getParameterCount(); i++) {
+            String name = properties.value()[i];
+            AnnotatedParameter parameter = annotatedConstructor.getParameter(i);
+            Field field = null;
+            try {
+                field = annotatedConstructor.getDeclaringClass().getDeclaredField(name);
+            } catch (NoSuchFieldException ignored) {
+            }
+            addJacksonAnnotationsToConstructorParameter(field, parameter, name);
+        }
+    }
+
+    private void addJacksonAnnotationsToConstructorParameter(Field field, AnnotatedParameter parameter, String name) {
+        boolean hasJsonProperty = false;
+        if (field != null) {
+            for (Annotation a : field.getAnnotations()) {
+                if (a.annotationType().getName().startsWith("com.fasterxml")) {
+                    parameter.addOrOverride(a);
+                    if (a.annotationType() == JsonProperty.class) {
+                        hasJsonProperty = true;
+                    }
+                }
+            }
+        }
+
+        if (!hasJsonProperty) {
+            JsonProperty jsonProperty =
+                    ProxyAnnotation.of(JsonProperty.class, Collections.singletonMap("value", name));
+            parameter.addOrOverride(jsonProperty);
+        }
+    }
+
+    private ConstructorProperties getConstructorPropertiesAnnotation(AnnotatedConstructor annotatedConstructor) {
+        Constructor<?> constructor = annotatedConstructor.getAnnotated();
+        return constructor.getAnnotation(ConstructorProperties.class);
     }
 
 
     @Override
     public String findImplicitPropertyName(AnnotatedMember member) {
         JsonProperty property = member.getAnnotation(JsonProperty.class);
-
         if (property == null) {
             if (member instanceof AnnotatedMethod) {
                 AnnotatedMethod method = (AnnotatedMethod) member;
                 String fieldName = BeanUtil.okNameForGetter(method);
-                try {
-                    if (fieldName != null) {
-                        Field field = member.getDeclaringClass().getDeclaredField(fieldName);
-                        if (field != null) {
-                            JsonProperty fieldProperty = field.getAnnotation(JsonProperty.class);
-                            if (fieldProperty != null) {
-                                return fieldProperty.value();
-                            }
-                        }
-                    }
-                } catch (NoSuchFieldException ignored) {
-                }
-
+                return getJacksonPropertyName(member.getDeclaringClass(), fieldName);
+            } else {
+                return null;
             }
-            return null;
         }
         return property.value();
+    }
+
+    private String getJacksonPropertyName(Class<?> declaringClass, String fieldName) {
+        if (fieldName != null) {
+            try {
+                Field field = declaringClass.getDeclaredField(fieldName);
+                if (field != null) {
+                    JsonProperty fieldProperty = field.getAnnotation(JsonProperty.class);
+                    if (fieldProperty != null) {
+                        return fieldProperty.value();
+                    }
+                }
+            } catch (NoSuchFieldException ignored) {
+            }
+        }
+        return null;
     }
 }
