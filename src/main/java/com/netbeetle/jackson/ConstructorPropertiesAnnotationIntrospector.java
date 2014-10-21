@@ -51,23 +51,24 @@ public class ConstructorPropertiesAnnotationIntrospector extends JacksonAnnotati
     }
 
     private void addJacksonAnnotationsToConstructorParameter(Field field, AnnotatedParameter parameter, String name) {
-        boolean hasJsonProperty = false;
         if (field != null) {
             for (Annotation a : field.getAnnotations()) {
                 if (a.annotationType().getName().startsWith("com.fasterxml")) {
-                    parameter.addOrOverride(a);
-                    if (a.annotationType() == JsonProperty.class) {
-                        hasJsonProperty = true;
+                    if (a.annotationType() != JsonProperty.class) {
+                        parameter.addOrOverride(a);
+                    } else {
+                        JsonProperty jp = (JsonProperty) a;
+                        if (!jp.value().equals("")) {
+                            name = jp.value();
+                        }
                     }
                 }
             }
         }
 
-        if (!hasJsonProperty) {
-            JsonProperty jsonProperty =
-                    ProxyAnnotation.of(JsonProperty.class, Collections.singletonMap("value", name));
-            parameter.addOrOverride(jsonProperty);
-        }
+        JsonProperty jsonProperty =
+                ProxyAnnotation.of(JsonProperty.class, Collections.singletonMap("value", name));
+        parameter.addOrOverride(jsonProperty);
     }
 
     private ConstructorProperties getConstructorPropertiesAnnotation(AnnotatedConstructor annotatedConstructor) {
@@ -84,11 +85,12 @@ public class ConstructorPropertiesAnnotationIntrospector extends JacksonAnnotati
                 AnnotatedMethod method = (AnnotatedMethod) member;
                 String fieldName = BeanUtil.okNameForGetter(method);
                 return getJacksonPropertyName(member.getDeclaringClass(), fieldName);
-            } else {
-                return null;
             }
+        } else if (!property.value().equals("")) {
+            return property.value();
         }
-        return property.value();
+
+        return null;
     }
 
     private String getJacksonPropertyName(Class<?> declaringClass, String fieldName) {
@@ -97,7 +99,7 @@ public class ConstructorPropertiesAnnotationIntrospector extends JacksonAnnotati
                 Field field = declaringClass.getDeclaredField(fieldName);
                 if (field != null) {
                     JsonProperty fieldProperty = field.getAnnotation(JsonProperty.class);
-                    if (fieldProperty != null) {
+                    if (fieldProperty != null && !fieldProperty.value().equals("")) {
                         return fieldProperty.value();
                     }
                 }
