@@ -1,4 +1,4 @@
-package com.netbeetle.jackson;
+package com.xebia.jackson;
 
 import java.io.IOException;
 

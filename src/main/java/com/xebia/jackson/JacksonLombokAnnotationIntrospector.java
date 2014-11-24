@@ -1,4 +1,4 @@
-package com.netbeetle.jackson;
+package com.xebia.jackson;
 
 import java.beans.ConstructorProperties;
 import java.lang.annotation.Annotation;
@@ -15,7 +15,7 @@ import com.fasterxml.jackson.databind.introspect.AnnotatedParameter;
 import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
 import com.fasterxml.jackson.databind.util.BeanUtil;
 
-public class ConstructorPropertiesAnnotationIntrospector extends JacksonAnnotationIntrospector {
+public class JacksonLombokAnnotationIntrospector extends JacksonAnnotationIntrospector {
     @Override
     public boolean hasCreatorAnnotation(Annotated annotated) {
         if (super.hasCreatorAnnotation(annotated)) {

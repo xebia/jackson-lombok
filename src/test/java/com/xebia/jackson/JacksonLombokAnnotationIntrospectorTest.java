@@ -1,4 +1,4 @@
-package com.netbeetle.jackson;
+package com.xebia.jackson;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -14,7 +14,7 @@ import lombok.Value;
 import org.junit.Before;
 import org.junit.Test;
 
-public class ConstructorPropertiesAnnotationIntrospectorTest {
+public class JacksonLombokAnnotationIntrospectorTest {
 
 
     public static final String JSON = "{\"empty\":\"\",\"value\":42,\"specialInt\":\"24\",\"new_name\":\"foobar\"}";
@@ -26,7 +26,7 @@ public class ConstructorPropertiesAnnotationIntrospectorTest {
     @Before
     public void setUp() {
         mapperWithExtention = new ObjectMapper();
-        mapperWithExtention.setAnnotationIntrospector(new ConstructorPropertiesAnnotationIntrospector());
+        mapperWithExtention.setAnnotationIntrospector(new JacksonLombokAnnotationIntrospector());
     }
 
     @Value

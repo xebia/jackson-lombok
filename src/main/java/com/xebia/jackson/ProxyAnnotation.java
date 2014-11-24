@@ -1,4 +1,4 @@
-package com.netbeetle.jackson;
+package com.xebia.jackson;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationHandler;
