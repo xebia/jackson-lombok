@@ -1,4 +1,4 @@
-package com.xebia.jackson;
+package com.xebia.jacksonlombok;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -20,13 +20,13 @@ public class LegacyPojo {
     }
 
     @JsonCreator
-    public static com.xebia.jackson.LegacyPojo create(@JsonProperty("new_name") String name,
+    public static com.xebia.jacksonlombok.LegacyPojo create(@JsonProperty("new_name") String name,
                                                           @JsonProperty("empty") String empty,
                                                           @JsonProperty("value") int value,
                                                           @JsonDeserialize(using = TestSupport.IntDeserializer.class)
                                                           @JsonSerialize(using = TestSupport.IntSerializer.class)
                                                           @JsonProperty("specialInt") Integer specialInt) {
-        return new com.xebia.jackson.LegacyPojo(name, empty, value, specialInt);
+        return new com.xebia.jacksonlombok.LegacyPojo(name, empty, value, specialInt);
     }
 
     public String getName() {
@@ -50,7 +50,7 @@ public class LegacyPojo {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        com.xebia.jackson.LegacyPojo that = (com.xebia.jackson.LegacyPojo) o;
+        com.xebia.jacksonlombok.LegacyPojo that = (com.xebia.jacksonlombok.LegacyPojo) o;
 
         if (value != that.value) return false;
         if (empty != null ? !empty.equals(that.empty) : that.empty != null) return false;

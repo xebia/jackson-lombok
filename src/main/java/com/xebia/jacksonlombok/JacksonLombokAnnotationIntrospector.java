@@ -1,4 +1,4 @@
-package com.xebia.jackson;
+package com.xebia.jacksonlombok;
 
 import java.beans.ConstructorProperties;
 import java.lang.annotation.Annotation;
