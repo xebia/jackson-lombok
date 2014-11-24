@@ -2,8 +2,32 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.xebia</groupId>
   <artifactId>jackson-lombok</artifactId>
+  <name>jackson-lombok</name>
   <version>1.0-SNAPSHOT</version>
-  <name>jackon-lombok</name>
+  <packaging>jar</packaging>
+  <description>
+    Jackson extension to add support for the generated constructors of Project Lombok objects
+  </description>
+  <url>https://github.com/xebia/jackson-lombok</url>
+  <licenses>
+    <license>
+      <name>MIT License</name>
+      <url>http://www.opensource.org/licenses/mit-license.php</url>
+    </license>
+  </licenses>
+  <developers>
+    <developer>
+      <name>Ruben Oostinga</name>
+      <email>roostinga@xebia.com</email>
+      <organization>Xebia</organization>
+      <organizationUrl>http://www.xebia.com</organizationUrl>
+    </developer>
+  </developers>
+  <scm>
+    <connection>scm:git:git@github.com:xebia/jackson-lombok.git</connection>
+    <developerConnection>scm:git:git@github.com:xebia/jackson-lombok.git</developerConnection>
+    <url>git@github.com:xebia/jackson-lombok.git</url>
+  </scm>
   <dependencies>
     <dependency>
       <groupId>org.projectlombok</groupId>
