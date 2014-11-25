@@ -3,7 +3,7 @@
   <groupId>com.xebia</groupId>
   <artifactId>jackson-lombok</artifactId>
   <name>jackson-lombok</name>
-  <version>1.0</version>
+  <version>1.1-SNAPSHOT</version>
   <packaging>jar</packaging>
   <description>
     Jackson extension to add support for the generated constructors of Project Lombok objects
