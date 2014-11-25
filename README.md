@@ -25,6 +25,17 @@ private static class ImmutablePojo {
 }
 ```
 
+##Installation
+Add the following maven depency
+
+``` xml
+<dependency>
+    <groupId>com.xebia</groupId>
+    <artifactId>jackson-lombok</artifactId>
+    <version>1.0</version>
+</dependency>
+```
+
 ##Licence
 All files are provided under an MIT license.
 
