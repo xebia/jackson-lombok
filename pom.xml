@@ -39,7 +39,14 @@
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
-      <version>2.4.3</version>
+      <version>[2.6.0,2.6.4]</version>
+      <!--
+      This version of jackson-lombok is compatible only >= 2.6.0.
+      Additional bad news: 2.7.x has API change (exception type?). Test is failed. (I don't know only test is faied now)
+      Now, jackson-lombok compiled with 2.6.4 will compatible with [2.6.0,2.6.4]
+
+      TODO: Update test for jackson 2.7.x
+      -->
     </dependency>
     <dependency>
       <groupId>junit</groupId>
