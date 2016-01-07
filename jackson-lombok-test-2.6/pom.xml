@@ -1,0 +1,63 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>com.xebia</groupId>
+    <artifactId>jackson-lombok-parent</artifactId>
+    <version>1.1-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>jackson-lombok-test-2.6</artifactId>
+  <name>jackson-lombok-test-2.6</name>
+  <packaging>jar</packaging>
+
+
+  <dependencies>
+    <dependency>
+      <groupId>com.xebia</groupId>
+      <artifactId>jackson-lombok</artifactId>
+      <version>1.1-SNAPSHOT</version>
+      <type>test-jar</type>
+      <exclusions>
+        <exclusion>
+          <groupId>com.fasterxml.jackson.core</groupId>
+          <artifactId>jackson-databind</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>com.xebia</groupId>
+      <artifactId>jackson-lombok</artifactId>
+      <version>1.1-SNAPSHOT</version>
+      <exclusions>
+        <exclusion>
+          <groupId>com.fasterxml.jackson.core</groupId>
+          <artifactId>jackson-databind</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>[2.6.0,2.6.999]<!--Latest version of 2.6--></version>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <!-- This pom.xml just run test-jar -->
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.15</version>
+        <configuration>
+          <dependenciesToScan>
+            <dependency>com.xebia:jackson-lombok</dependency>
+          </dependenciesToScan>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
