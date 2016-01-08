@@ -1,10 +1,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.xebia</groupId>
-  <artifactId>jackson-lombok</artifactId>
-  <name>jackson-lombok</name>
+  <artifactId>jackson-lombok-parent</artifactId>
+  <name>jackson-lombok-parent</name>
   <version>1.1-SNAPSHOT</version>
-  <packaging>jar</packaging>
+  <packaging>pom</packaging>
   <description>
     Jackson extension to add support for the generated constructors of Project Lombok objects
   </description>
@@ -29,6 +29,9 @@
     <url>git@github.com:xebia/jackson-lombok.git</url>
     <tag>HEAD</tag>
   </scm>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
   <dependencies>
     <dependency>
       <groupId>org.projectlombok</groupId>
@@ -39,7 +42,14 @@
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
-      <version>2.4.3</version>
+      <version>[2.6.0,2.6.999]</version>
+      <!--
+      This version of jackson-lombok is compatible only >= 2.6.0.
+      Additional bad news: 2.7.x has API change (exception type?). Test is failed. (I don't know only test is faied now)
+      Now, jackson-lombok compiled with 2.6.4 will compatible with [2.6.0,2.6.4]
+
+      TODO: Update test for jackson 2.7.x
+      -->
     </dependency>
     <dependency>
       <groupId>junit</groupId>
@@ -130,4 +140,11 @@
       </plugin>
     </plugins>
   </build>
+
+  <modules>
+    <module>jackson-lombok</module>
+    <module>jackson-lombok-test-2.5</module>
+    <module>jackson-lombok-test-2.6</module>
+    <module>jackson-lombok-test-2.7</module>
+  </modules>
 </project>
