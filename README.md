@@ -5,6 +5,8 @@ This repository contains extension for [Jackson][1] which allows better interope
 
 The `JacksonLombokAnnotationIntrospector` allows Jackson to serialize and deserialize classes with constructors that are annotated with the [java.beans.ConstructorProperties][2] annotations. [Lombok][3] will automatically add this annotation to the constructors it generates.
 
+This project is compatible with Jackson 2.4 - 2.6. Jackson [2.7 added support][4] for `ConstructorProperties` which makes this project obsolete.
+
 ## Usage
 Add the `JacksonLombokAnnotationIntrospector` to the Jackson `ObjectMapper` in the following manner.
 
@@ -42,3 +44,4 @@ All files are provided under an MIT license.
 [1]: http://jackson.codehaus.org/
 [2]: http://download.oracle.com/javase/6/docs/api/java/beans/ConstructorProperties.html
 [3]: http://projectlombok.org/
+[4]: https://github.com/FasterXML/jackson-databind/blob/master/release-notes/CREDITS
