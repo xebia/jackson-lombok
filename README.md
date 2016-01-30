@@ -32,7 +32,7 @@ Add the following maven depency
 <dependency>
     <groupId>com.xebia</groupId>
     <artifactId>jackson-lombok</artifactId>
-    <version>1.0</version>
+    <version>1.1</version>
 </dependency>
 ```
 
